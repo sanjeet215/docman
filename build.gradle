@@ -24,6 +24,7 @@ dependencies {
 	implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
 	implementation group: 'org.apache.tika', name: 'tika-core', version:'2.8.0'
 	implementation group: 'org.apache.pdfbox', name: 'pdfbox', version:'2.0.29'
+	implementation group: 'org.apache.pdfbox', name: 'pdfbox-tools', version:'2.0.29'
 	implementation 'org.jetbrains:annotations:23.0.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'org.postgresql:postgresql'

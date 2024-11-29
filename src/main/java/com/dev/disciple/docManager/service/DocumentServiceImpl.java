@@ -4,6 +4,7 @@ import com.dev.disciple.docManager.common.CommonUtils;
 import com.dev.disciple.docManager.common.FileType;
 import com.dev.disciple.docManager.dto.DocumentMetaData;
 import com.dev.disciple.docManager.processors.DefaultDocumentProcessor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,20 +23,35 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final FileService fileService;
 
-    public DocumentServiceImpl(DefaultDocumentProcessor defaultDocumentProcessor,DocumentConverterFactory documentConverterFactory,FileService fileService) {
+    public DocumentServiceImpl(DefaultDocumentProcessor defaultDocumentProcessor, DocumentConverterFactory documentConverterFactory, FileService fileService) {
         this.defaultDocumentProcessor = defaultDocumentProcessor;
         this.documentConverterFactory = documentConverterFactory;
         this.fileService = fileService;
     }
+
     @Override
     public DocumentMetaData extractMetaData(MultipartFile file) {
-        DocumentMetaData metaData = defaultDocumentProcessor.processDocument(file);
-        logger.debug("extractMetaData: file type: {}",metaData.getFileType());
-        FileType fileType = CommonUtils.getFileType(metaData.getFileType());
+
+        String fileExtension = StringUtils.EMPTY;
+        DocumentMetaData metaData = new DocumentMetaData();
+        try {
+            metaData = defaultDocumentProcessor.processDocument(file);
+            fileExtension = metaData.getFileType();
+            logger.debug("extractMetaData: fileExtension: {}", fileExtension);
+        } catch (Exception exception) {
+            logger.error("error while converting.");
+        }
+        if (StringUtils.isBlank(fileExtension)) {
+            logger.debug("extractMetaData(): original file name: {}",file.getOriginalFilename());
+            fileExtension = CommonUtils.getFileExtension(file.getOriginalFilename());
+            metaData.setFileType(fileExtension);
+        }
+        FileType fileType = CommonUtils.getFileType(fileExtension);
+
         DocumentConverterService documentConverterService = documentConverterFactory.getConverter(fileType);
         try {
             File outputFile = documentConverterService.convertDocumentToPdf(file);
-            fileService.saveFileAtAGivenLocation(outputFile,outputFile.getName(),"resources/testResults");
+            fileService.saveFileAtAGivenLocation(outputFile, outputFile.getName(), "resources/testResults");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -3,7 +3,7 @@ package com.dev.disciple.docManager.common;
 public enum FileType {
     WORD("doc", "docx"),
     EXCEL("xls", "xlsx"),
-    IMAGE("image/png","jpg", "jpeg", "png", "gif", "bmp"),
+    IMAGE("image/png","image/jpeg","jpg", "jpeg", "png", "gif", "bmp"),
     PDF("pdf"),
     TEXT("txt"),
     UNKNOWN;
