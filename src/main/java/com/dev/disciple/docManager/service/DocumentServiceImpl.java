@@ -1,5 +1,6 @@
 package com.dev.disciple.docManager.service;
 
+import com.dev.disciple.docManager.common.BorderType;
 import com.dev.disciple.docManager.common.CommonUtils;
 import com.dev.disciple.docManager.common.FileType;
 import com.dev.disciple.docManager.dto.DocumentMetaData;
@@ -30,7 +31,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public DocumentMetaData extractMetaData(MultipartFile file) {
+    public DocumentMetaData extractMetaData(MultipartFile file,String borderType,String pageSize) {
 
         String fileExtension = StringUtils.EMPTY;
         DocumentMetaData metaData = new DocumentMetaData();
@@ -50,8 +51,12 @@ public class DocumentServiceImpl implements DocumentService {
 
         DocumentConverterService documentConverterService = documentConverterFactory.getConverter(fileType);
         try {
-            File outputFile = documentConverterService.convertDocumentToPdf(file);
-            fileService.saveFileAtAGivenLocation(outputFile, outputFile.getName(), "resources/testResults");
+//            File outputFile = documentConverterService.convertDocumentToPdf(file, BorderType.THIN_BORDER);
+//            fileService.saveFileAtAGivenLocation(outputFile, outputFile.getName(), "resources/testResults");
+
+            File outputFileNew = documentConverterService.convertDocumentToPdf(file, null);
+            fileService.saveFileAtAGivenLocation(outputFileNew, outputFileNew.getName(), "resources/testResults");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -8,10 +8,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class DocumentConverterFactory {
 
-    private ImageConverterServiceImpl imageConverterServiceImpl;
+    private final ImageConverterServiceImpl imageConverterServiceImpl;
+
+    private final DocManConverterServiceImpl docManConverterServiceImpl;
     @Autowired
-    public DocumentConverterFactory(ImageConverterServiceImpl imageConverterServiceImpl) {
+    public DocumentConverterFactory(ImageConverterServiceImpl imageConverterServiceImpl,DocManConverterServiceImpl docManConverterServiceImpl) {
         this.imageConverterServiceImpl = imageConverterServiceImpl;
+        this.docManConverterServiceImpl = docManConverterServiceImpl;
     }
 
 
@@ -23,7 +26,8 @@ public class DocumentConverterFactory {
             case EXCEL:
                 break;
             case IMAGE:
-                documentConverterService = imageConverterServiceImpl;
+                //documentConverterService = imageConverterServiceImpl;
+                documentConverterService = docManConverterServiceImpl;
                 break;
             default: break;
         }

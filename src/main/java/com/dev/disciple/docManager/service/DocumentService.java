@@ -8,5 +8,5 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface DocumentService {
 
-    DocumentMetaData extractMetaData(MultipartFile file);
+    DocumentMetaData extractMetaData(MultipartFile file,String border,String pageSize);
 }

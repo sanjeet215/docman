@@ -19,20 +19,20 @@ public class DocumentController {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 
-    private DocumentService documentService;
+    private final DocumentService documentService;
     public DocumentController(DocumentService documentService) {
         this.documentService = documentService;
     }
 
     @PostMapping("/metadata")
     public ResponseEntity<Document> uploadFile(@RequestParam("file") MultipartFile file,
-                                               @RequestParam("operation") String name,
-                                               @RequestParam("page_size") String description) {
+                                               @RequestParam("border") String borderType,
+                                               @RequestParam("pageSize") String pageSize) {
 
         logger.info(">>uploadFile:{}, file name: {}", file, file.getName());
         Document document = new Document();
         document.put("data", "test");
-        documentService.extractMetaData(file);
+        documentService.extractMetaData(file,borderType,pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(document);
     }
 }
