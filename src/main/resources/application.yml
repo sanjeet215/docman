@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: doc-manager
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+
+logging:
+  level:
+    com.dev.disciple.docManager: DEBUG  # Set the logging level for your package to DEBUG
+    root: WARN                     # Set the root logging level to WARN to suppress Spring Boot's default logs
+
+  # Optionally, you can configure the log format and other settings
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} - %msg%n'  # Customize log format
