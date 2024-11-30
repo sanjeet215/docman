@@ -1,10 +1,14 @@
-package com.dev.disciple.docManager.service;
+package com.dev.disciple.docManager.serviceimpl;
 
 import com.dev.disciple.docManager.common.BorderType;
 import com.dev.disciple.docManager.common.CommonUtils;
 import com.dev.disciple.docManager.common.FileType;
 import com.dev.disciple.docManager.dto.DocumentMetaData;
 import com.dev.disciple.docManager.processors.DefaultDocumentProcessor;
+import com.dev.disciple.docManager.service.DocumentConverterFactory;
+import com.dev.disciple.docManager.service.DocumentConverterService;
+import com.dev.disciple.docManager.service.DocumentService;
+import com.dev.disciple.docManager.service.FileService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

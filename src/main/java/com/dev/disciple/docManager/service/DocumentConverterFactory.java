@@ -1,6 +1,8 @@
 package com.dev.disciple.docManager.service;
 
 import com.dev.disciple.docManager.common.FileType;
+import com.dev.disciple.docManager.serviceimpl.DocManConverterServiceImpl;
+import com.dev.disciple.docManager.serviceimpl.ImageConverterServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

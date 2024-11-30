@@ -1,7 +1,8 @@
-package com.dev.disciple.docManager.service;
+package com.dev.disciple.docManager.serviceimpl;
 
 import com.dev.disciple.docManager.common.BorderType;
 import com.dev.disciple.docManager.common.CommonUtils;
+import com.dev.disciple.docManager.service.DocumentConverterService;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.slf4j.Logger;
