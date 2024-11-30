@@ -1,6 +1,8 @@
 package com.dev.disciple.docManager.service;
 
 import com.dev.disciple.docManager.common.BorderType;
+import com.dev.disciple.docManager.common.CommonUtils;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +25,7 @@ public class ImageConverterServiceImpl implements DocumentConverterService {
     private static final Logger logger = LoggerFactory.getLogger(ImageConverterServiceImpl.class);
 
     @Override
-    public File convertDocumentToPdf(MultipartFile inputFile, BorderType borderType) throws IOException {
+    public File convertDocumentToPdf(MultipartFile inputFile, BorderType borderType,String pageSize) throws IOException {
         // Validate the input file
         if (inputFile == null || inputFile.isEmpty()) {
             throw new IllegalArgumentException("Input file cannot be null or empty");
@@ -34,7 +36,8 @@ public class ImageConverterServiceImpl implements DocumentConverterService {
 
         try (PDDocument document = new PDDocument()) {
             // Create a new page for the PDF
-            PDPage page = new PDPage();
+            PDRectangle pdRectangle = CommonUtils.getPDRectangle(pageSize);
+            PDPage page = new PDPage(pdRectangle);
             document.addPage(page);
 
             // Read the image as BufferedImage
@@ -65,10 +68,10 @@ public class ImageConverterServiceImpl implements DocumentConverterService {
                 // Draw the border based on the BorderType
                 logger.debug("convertDocumentToPdf(): {}", borderType);
                 switch (borderType) {
-                    case THIN_BORDER -> {
+                    case THIN -> {
                         drawBorder(contentStream, xOffset, yOffset, imageWidth * scale, imageHeight * scale, 25);
                     }
-                    case THICK_BORDER -> {
+                    case THICK -> {
                         drawBorder(contentStream, xOffset, yOffset, imageWidth * scale, imageHeight * scale, 5);
                     }
                     case NO_BORDER -> {

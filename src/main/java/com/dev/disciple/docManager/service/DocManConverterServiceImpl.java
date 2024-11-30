@@ -1,6 +1,5 @@
 package com.dev.disciple.docManager.service;
 
-
 import com.dev.disciple.docManager.common.BorderType;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -24,7 +23,7 @@ public class DocManConverterServiceImpl implements DocumentConverterService {
     private static final Logger logger = LoggerFactory.getLogger(DocManConverterServiceImpl.class);
 
     @Override
-    public File convertDocumentToPdf(MultipartFile inputFile, BorderType borderType) {
+    public File convertDocumentToPdf(MultipartFile inputFile, BorderType borderType,String pageSize) {
 
         // Validate the input file
         if (inputFile == null || inputFile.isEmpty()) {
@@ -68,33 +67,51 @@ public class DocManConverterServiceImpl implements DocumentConverterService {
                 float xOffset = (pageWidth - (imageWidth * scale)) / 2;
                 float yOffset = (pageHeight - (imageHeight * scale)) / 2;
 
-                // Draw the border around the image
-                float borderThickness = 2; // Border thickness in points (adjust as needed)
-                float imageX = xOffset;
-                float imageY = yOffset;
-                float scaledWidth = imageWidth * scale;
-                float scaledHeight = imageHeight * scale;
+                // Border thickness based on BorderType
+                float borderThickness = 0;
+                if (borderType != null) {
+                    switch (borderType) {
+                        case THIN:
+                            borderThickness = 1; // Thin border thickness
+                            break;
+                        case MEDIUM:
+                            borderThickness = 3; // Medium border thickness
+                            break;
+                        case THICK:
+                            borderThickness = 5; // Thick border thickness
+                            break;
+                        case NO_BORDER:
+                            borderThickness = 0; // No border
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Unsupported border type: " + borderType);
+                    }
+                }
 
-                // Draw the border (rectangle)
-                contentStream.setLineWidth(borderThickness);
-                contentStream.setStrokingColor(255, 255, 255); // White color for the border
+                // Check if a border is needed
+                if (borderThickness > 0) {
+                    // Set border color (e.g., black)
+                    contentStream.setLineWidth(borderThickness);
+                    contentStream.setStrokingColor(255, 255, 255); // RGB for black
 
-                // Move to the start position and draw the rectangle
-                contentStream.moveTo(imageX - borderThickness, imageY - borderThickness);
-                contentStream.lineTo(imageX + scaledWidth + borderThickness, imageY - borderThickness);
-                contentStream.lineTo(imageX + scaledWidth + borderThickness, imageY + scaledHeight + borderThickness);
-                contentStream.lineTo(imageX - borderThickness, imageY + scaledHeight + borderThickness);
-                contentStream.closePath();
-                contentStream.stroke();
+                    // Draw the border rectangle around the image, with a padding to avoid overlap
+                    float borderPadding = borderThickness / 2; // Half of the border thickness as padding
+                    contentStream.moveTo(xOffset - borderPadding, yOffset - borderPadding);
+                    contentStream.lineTo(xOffset + imageWidth * scale + borderPadding, yOffset - borderPadding);
+                    contentStream.lineTo(xOffset + imageWidth * scale + borderPadding, yOffset + imageHeight * scale + borderPadding);
+                    contentStream.lineTo(xOffset - borderPadding, yOffset + imageHeight * scale + borderPadding);
+                    contentStream.closePath();
+                    contentStream.stroke();
+                }
 
-                // Draw the image inside the border
-                contentStream.drawImage(pdImage, imageX, imageY, scaledWidth, scaledHeight);
+                // Draw the image inside the border or as is
+                contentStream.drawImage(pdImage, xOffset, yOffset, imageWidth * scale, imageHeight * scale);
             }
 
             // Save the document to the output file
             document.save(outputFile);
         } catch (Exception exception) {
-            logger.error("error while converting the file.");
+            logger.error("Error while converting the file.", exception);
         }
 
         return outputFile;

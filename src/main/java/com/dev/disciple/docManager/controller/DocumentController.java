@@ -26,10 +26,10 @@ public class DocumentController {
 
     @PostMapping("/metadata")
     public ResponseEntity<Document> uploadFile(@RequestParam("file") MultipartFile file,
-                                               @RequestParam("border") String borderType,
-                                               @RequestParam("pageSize") String pageSize) {
+                                               @RequestParam(value = "border", required = false) String borderType,
+                                               @RequestParam(value = "pageSize", required = false) String pageSize) {
 
-        logger.info(">>uploadFile:{}, file name: {}", file, file.getName());
+        logger.info(">> Input filename:{} ,border: {},pageSize: {} ",file.getOriginalFilename(),borderType,pageSize);
         Document document = new Document();
         document.put("data", "test");
         documentService.extractMetaData(file,borderType,pageSize);

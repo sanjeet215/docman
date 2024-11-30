@@ -9,5 +9,5 @@ import java.io.IOException;
 
 @Service
 public interface DocumentConverterService {
-    File convertDocumentToPdf(MultipartFile inputFile, BorderType borderType) throws IOException;
+    File convertDocumentToPdf(MultipartFile inputFile, BorderType borderType,String pageSize) throws IOException;
 }

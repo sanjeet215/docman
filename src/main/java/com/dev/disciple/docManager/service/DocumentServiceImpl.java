@@ -49,12 +49,12 @@ public class DocumentServiceImpl implements DocumentService {
         }
         FileType fileType = CommonUtils.getFileType(fileExtension);
 
-        DocumentConverterService documentConverterService = documentConverterFactory.getConverter(fileType);
+        DocumentConverterService documentConverterService = documentConverterFactory.getConverter(fileType,borderType,pageSize);
         try {
-//            File outputFile = documentConverterService.convertDocumentToPdf(file, BorderType.THIN_BORDER);
+//            File outputFile = documentConverterService.convertDocumentToPdf(file, BorderType.THIN);
 //            fileService.saveFileAtAGivenLocation(outputFile, outputFile.getName(), "resources/testResults");
 
-            File outputFileNew = documentConverterService.convertDocumentToPdf(file, null);
+            File outputFileNew = documentConverterService.convertDocumentToPdf(file, BorderType.MEDIUM,pageSize);
             fileService.saveFileAtAGivenLocation(outputFileNew, outputFileNew.getName(), "resources/testResults");
 
         } catch (IOException e) {

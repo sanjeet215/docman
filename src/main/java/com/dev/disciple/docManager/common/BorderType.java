@@ -1,7 +1,8 @@
 package com.dev.disciple.docManager.common;
 
 public enum BorderType {
-    THIN_BORDER,
-    THICK_BORDER,
+    THIN,
+    THICK,
+    MEDIUM,
     NO_BORDER
 }
